@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import BookList from './BookList';
 import { search } from './BookAPI';
 
@@ -8,6 +9,12 @@ export default class SearchBooks extends Component {
     books: [],
     error: '',
     query: ''
+  }
+
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+    shelves: PropTypes.array.isRequired,
+    onUpdateBook: PropTypes.func.isRequired
   }
 
   searchBooks(query) {
