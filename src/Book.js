@@ -35,7 +35,8 @@ const Book = (props) => {
 
 Book.defaultProps = {
   authors: [],
-  imageLinks: { thumbnail: "http://books.google.com/books/content?id=notfound&printsec=frontcover&img=1&zoom=1&source=gbs_api" }
+  imageLinks: { thumbnail: "http://books.google.com/books/content?id=notfound&printsec=frontcover&img=1&zoom=1&source=gbs_api" },
+  shelf: "none"
 };
 
 Book.propTypes = {
