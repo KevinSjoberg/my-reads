@@ -37,7 +37,7 @@ export default class App extends Component {
             <ListBooks books={books} shelves={shelves} onUpdateBook={this.updateBook} />
            )} />
           <Route exact path="/search" render={() => (
-            <SearchBooks shelves={shelves} onUpdateBook={this.updateBook} />
+            <SearchBooks categorizedBooks={books} shelves={shelves} onUpdateBook={this.updateBook} />
           )} />
         </main>
       </div>

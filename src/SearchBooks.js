@@ -4,6 +4,14 @@ import PropTypes from 'prop-types';
 import BookList from './BookList';
 import { search } from './BookAPI';
 
+const ERROR_EMPTY_QUERY = "empty query";
+
+const addShelfToBooks = (categorizedBooks, uncategorizedBooks) => {
+  const shelfLookup =
+    categorizedBooks.reduce((acc, book) => ({ ...acc, [book.id]: book.shelf }), {});
+  return uncategorizedBooks.map(book => ({ ...book, shelf: shelfLookup[book.id] }));
+};
+
 export default class SearchBooks extends Component {
   state = {
     books: [],
@@ -12,7 +20,7 @@ export default class SearchBooks extends Component {
   }
 
   static propTypes = {
-    books: PropTypes.array.isRequired,
+    categorizedBooks: PropTypes.array.isRequired,
     shelves: PropTypes.array.isRequired,
     onUpdateBook: PropTypes.func.isRequired
   }
@@ -27,17 +35,23 @@ export default class SearchBooks extends Component {
 
     search(query, 20).then(books => {
       if (Array.isArray(books)) {
-        this.setState({ books })
-      } else {
-        this.setState({ error: books.error })
+        this.setState({ books });
+        return;
+      }
+
+      switch(books.error) {
+        case ERROR_EMPTY_QUERY:
+          this.setState({ error: "No books found." });
+          break;
+        default:
+          this.setState({ error: books.error });
       }
     });
   }
 
   render() {
     const { books, error, query } = this.state;
-    const { shelves, onUpdateBook } = this.props;
-
+    const { categorizedBooks, shelves, onUpdateBook } = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -52,9 +66,12 @@ export default class SearchBooks extends Component {
         </div>
         <div className="search-books-results">
           {error !== '' ? (
-            <h2>No books found. Error: <pre>{error}</pre></h2>
+            <h2>{error}</h2>
           ) : (
-            <BookList books={books} shelves={shelves} onUpdateBook={onUpdateBook} />
+            <BookList
+              books={addShelfToBooks(categorizedBooks, books)}
+              shelves={shelves}
+              onUpdateBook={onUpdateBook} />
           )}
         </div>
       </div>
