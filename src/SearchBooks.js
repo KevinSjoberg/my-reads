@@ -38,8 +38,6 @@ export default class SearchBooks extends Component {
     const { books, error, query } = this.state;
     const { shelves, onUpdateBook } = this.props;
 
-    console.log("error", this.state.error);
-
     return (
       <div className="search-books">
         <div className="search-books-bar">
